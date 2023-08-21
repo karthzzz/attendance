@@ -1,0 +1,207 @@
+{
+  "project_info": {
+    "project_number": "297039140091",
+    "firebase_url": "https://fir-auth-dc1f8-default-rtdb.firebaseio.com",
+    "project_id": "fir-auth-dc1f8",
+    "storage_bucket": "fir-auth-dc1f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297039140091:android:f9d4764ee4ae4c2f29cc5e",
+        "android_client_info": {
+          "package_name": "com.example.attendance1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297039140091-4d2ukkrh5jejm18g1j75mtpv86fm7qno.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.attendance1",
+            "certificate_hash": "5f2c38c3664bd68ec6ffd28c87d6c50f1586baef"
+          }
+        },
+        {
+          "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuGiUBKQxAxxv6b1boHxI2KkUAKWqB3u0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297039140091-55e2e2mqpc9aqfptiororfaio3ueauh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297039140091:android:030ae1b8eeb36d3029cc5e",
+        "android_client_info": {
+          "package_name": "com.example.fitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuGiUBKQxAxxv6b1boHxI2KkUAKWqB3u0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297039140091-55e2e2mqpc9aqfptiororfaio3ueauh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297039140091:android:fe8aef6bbdfd2e8129cc5e",
+        "android_client_info": {
+          "package_name": "com.example.login_fb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuGiUBKQxAxxv6b1boHxI2KkUAKWqB3u0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297039140091-55e2e2mqpc9aqfptiororfaio3ueauh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297039140091:android:e6d8edc4445d976f29cc5e",
+        "android_client_info": {
+          "package_name": "com.example.realtime2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuGiUBKQxAxxv6b1boHxI2KkUAKWqB3u0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297039140091-55e2e2mqpc9aqfptiororfaio3ueauh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297039140091:android:147e3e797650eee629cc5e",
+        "android_client_info": {
+          "package_name": "com.madan.fitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297039140091-c73nc1m10q938sqled9r5osfveihc8rh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.madan.fitness",
+            "certificate_hash": "5f2c38c3664bd68ec6ffd28c87d6c50f1586baef"
+          }
+        },
+        {
+          "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuGiUBKQxAxxv6b1boHxI2KkUAKWqB3u0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297039140091-2gvrn6a7n762ffn47e6ouern6mdlu425.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297039140091-55e2e2mqpc9aqfptiororfaio3ueauh3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitness"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
