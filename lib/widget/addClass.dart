@@ -1,6 +1,6 @@
 import 'package:attendance1/excel_file_operation/excel_retrieve_data_operation.dart';
 import 'package:attendance1/firebase/firebaseQueries.dart';
-import 'package:attendance1/widget/branches_page.dart';
+import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:flutter/material.dart';
@@ -30,6 +30,7 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
   final _nameController = TextEditingController();
   final _rollcontroller = TextEditingController();
   String _filePath = '';
+  FilePickerResult? resultPicker;
   List<dynamic>? listOfStudents;
 
   void showSnackbarScreen(String e) {
@@ -73,6 +74,7 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
     if (result != null) {
       setState(() {
         _filePath = result.files.single.path!;
+        resultPicker = result;
       });
     }
     await readExcel(_filePath).then((value) {
@@ -188,7 +190,9 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
                         onPressed: () {
                           pickFile();
                         },
-                        child: const Text("Add Excel file"),
+                        child: _filePath.length == 0
+                            ? Text("Add Excel file")
+                            : Text(resultPicker!.names.first.toString()),
                       )
                     ],
                   ),

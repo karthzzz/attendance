@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'post_attendance.dart'; // Replace 'sample.dart' with the correct import path for your 'post_attendance_page.dart'
+import '../post_attendance.dart'; // Replace 'sample.dart' with the correct import path for your 'post_attendance_page.dart'
 
 void main() => runApp(MaterialApp(
       home: FacultyPostAttendance(),

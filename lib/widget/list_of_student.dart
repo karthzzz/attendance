@@ -1,6 +1,6 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/widget/addClass.dart';
-import 'package:attendance1/widget/branches_page.dart';
+import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:attendance1/widget/student_list.dart';
 import 'package:flutter/material.dart';
 
@@ -9,12 +9,12 @@ class ListOfStudent extends StatefulWidget {
     super.key,
     required this.section,
     required this.branch,
-    required this.date,
+     
   });
 
   final String section;
   final String branch;
-  final String date;
+   
 
   @override
   State<ListOfStudent> createState() => _ListOfStudentState();

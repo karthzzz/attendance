@@ -1,17 +1,18 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
-import 'package:attendance1/widget/branches_page.dart';
+import 'package:attendance1/widget/admin/admin_branch_page.dart';
+import 'package:attendance1/widget/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'admin_page.dart';
 
-class RegisterPage extends StatefulWidget {
-  RegisterPage({super.key});
+class LoginPage extends StatefulWidget {
+  LoginPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   @override
@@ -47,20 +48,22 @@ class _RegisterPageState extends State<RegisterPage> {
                 fontSize: 32, fontWeight: FontWeight.bold, color: Colors.green),
           ),
           const SizedBox(height: 40),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: TextField(
-              decoration: InputDecoration(
+              controller: _emailController,
+              decoration: const InputDecoration(
                 hintText: 'Email',
                 border: OutlineInputBorder(),
               ),
             ),
           ),
           const SizedBox(height: 20),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextField(
-              decoration: InputDecoration(
+              controller: _passwordController,
+              decoration:const InputDecoration(
                 hintText: 'Password',
                 border: OutlineInputBorder(),
               ),
@@ -70,11 +73,14 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 40),
           ElevatedButton(
             onPressed: () async {
-              final userCredential = await signInWithGoogle();
-              if (userCredential.user != null) {
+              final result = await signWithEmailAndPassword(_emailController.text, _passwordController.text);
+              if(result){
                 showSnack("Sucess");
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (ctx) => BranchesPage()));
+                    .pushReplacement(MaterialPageRoute(builder: (ctx) => BranchesPage()));
+              }
+              else{
+                showSnack("Failed");
               }
             },
             style: ElevatedButton.styleFrom(
@@ -84,6 +90,8 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             child: const Text('Login'),
           ),
+           
+           
         ],
       ),
     );

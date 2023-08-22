@@ -1,6 +1,7 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/model/modelClass.dart';
 import 'package:attendance1/widget/addClass.dart';
+import 'package:attendance1/widget/admin/admin.dart';
 import 'package:attendance1/widget/list_of_student.dart';
 import 'package:flutter/material.dart';
 
@@ -49,6 +50,23 @@ class _BranchesPageState extends State<BranchesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: Row(
+        children: [
+          FilledButton.icon(
+              onPressed: () async {
+                final result = await signOut();
+                if (result) {
+                  showSnackbarScreen("signOutSucessfull");
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (ctx) => LoginPage()));
+                } else {
+                  showSnackbarScreen("SignOut Rejected");
+                }
+              },
+              icon: Icon(Icons.logout_outlined),
+              label: const Text("Log Out"))
+        ],
+      ),
       appBar: AppBar(
         title: const Text('BRANCHES'),
         actions: [
@@ -137,7 +155,7 @@ class _BranchButtonState extends State<BranchButton> {
                               builder: (ctx) => ListOfStudent(
                                     branch: branchName,
                                     section: "Section-A",
-                                    date: widget.date,
+                                   
                                   )));
                         },
                         child: const Text("Section-A")),
@@ -148,7 +166,7 @@ class _BranchButtonState extends State<BranchButton> {
                               builder: (ctx) => ListOfStudent(
                                 branch: branchName,
                                 section: 'Section-B',
-                                date: widget.date,
+                               
                               ),
                             ),
                           );

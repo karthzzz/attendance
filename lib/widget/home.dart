@@ -1,8 +1,10 @@
 import 'package:attendance1/excel_file_operation/excel_retrieve_data_operation.dart';
+import 'package:attendance1/widget/faculty/faculty_login.dart';
+import 'package:attendance1/widget/faculty/faculty_register.dart';
 import 'package:attendance1/widget/student_home.dart';
 import 'package:flutter/material.dart';
-import 'faculty_login.dart';
-import 'admin.dart';
+ 
+import 'admin/admin.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -25,7 +27,7 @@ class Home extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => RegisterPage(),
+                    builder: (context) => LoginPage(),
                   ),
                 );
               },
@@ -38,7 +40,7 @@ class Home extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FacultyLogin(),
+                      builder: (context) => FacultyLoginScreen(),
                     ),
                   );
                 }),
@@ -55,16 +57,7 @@ class Home extends StatelessWidget {
                   );
                   // Add navigation logic for Student
                 }),
-            const SizedBox(
-              height: 40,
-            ),
-            Button(
-                label: 'excel',
-                icon: Icons.person,
-                onPressed: () {
-                  excel_assets();
-                  // Add navigation logic for Student
-                }),
+             
           ],
         ),
       ),

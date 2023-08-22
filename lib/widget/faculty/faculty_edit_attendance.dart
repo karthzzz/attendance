@@ -1,5 +1,6 @@
+import 'package:attendance1/widget/edit_attendance.dart';
 import 'package:flutter/material.dart';
-import 'post_attendance.dart'; // Import the PostAttendancePage class from the appropriate file
+  // Import the PostAttendancePage class from the appropriate file
 
 class FacultyEditAttendance extends StatelessWidget {
   void _navigateToAttendancePage(BuildContext context, String branch) {
@@ -22,7 +23,7 @@ class FacultyEditAttendance extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
+            const  Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(

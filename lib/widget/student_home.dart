@@ -1,7 +1,7 @@
- import 'package:attendance1/widget/day_to_day.dart';
+ import 'package:attendance1/widget/student/day_to_day.dart';
 import 'package:flutter/material.dart';
 
-import 'monthly.dart';
+import 'student/monthly.dart';
 
 void main() {
   runApp(MaterialApp(

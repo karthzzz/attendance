@@ -53,15 +53,14 @@ class _StudentListState extends State<StudentList> {
         child: Row(
           children: [
             Expanded(
-              child: CheckboxListTile(
-                  value: attendance,
-                  title: Text(widget.roll_number),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  checkboxShape: const CircleBorder(side: BorderSide()),
-                  onChanged: (value) {
-                    updateAttendance(value);
-                  }),
+              child: Card(
+                margin:const  EdgeInsets.all(4),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                child: ListTile(
+                  title: Text(widget.name),
+                  subtitle: Text(widget.roll_number),
+                ),
+              )
             )
           ],
         ),
