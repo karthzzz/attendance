@@ -1,6 +1,7 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:attendance1/widget/faculty/faculty_branch_list.dart';
+import 'package:attendance1/widget/faculty/faculty_login.dart';
 import 'package:flutter/material.dart';
 
 class FacultyRegistrationScreen extends StatefulWidget {
@@ -17,10 +18,10 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
     'English',
     'Art'
   ];
-  final _facultyNameController = TextEditingController();
+ 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  List<String> selectedSubjects =  [];
+  List<String> selectedSubjects = [];
 
   void showSnack(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -34,15 +35,13 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
 
   void showFacultySubjectInDataBase() async {
     final result = await createFaculty(
-      _facultyNameController.text,
+      firebaseAuth.currentUser!.displayName!,
       selectedSubjects,
       _emailController.text,
       _passwordController.text,
     );
     if (result) {
       showSnack("Sucess in creating faculty");
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => const BranchesPage()));
     } else {
       showSnack("Failed in creating faculty");
     }
@@ -60,12 +59,7 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                controller: _facultyNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Faculty Name',
-                ),
-              ),
+               
               const SizedBox(height: 16),
               ...subjects.map((subject) {
                 return CheckboxListTile(
@@ -100,20 +94,52 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
-                  final result = await signWithEmailAndPassword(
+                  final result = await  createWithEmailAndPassword(
                       _emailController.text, _passwordController.text);
 
                   if (result) {
                     showSnack("Sucess");
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (ctx) => FacultyBranchesPage()));
+                    showFacultySubjectInDataBase();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (ctx) => FacultyBranchesPage(
+                              email: firebaseAuth.currentUser!.email!,
+                              name: firebaseAuth.currentUser!.displayName!,
+                              imageUrl: firebaseAuth.currentUser!.photoURL!,
+                            )));
                   } else {
                     showSnack("Failed");
                   }
-                  showFacultySubjectInDataBase();
                 },
                 child: Text('Register'),
               ),
+              const SizedBox(height: 24),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (ctx) => FacultyLoginScreen()));
+                },
+                child: const Text('Already have an account? Login here'),
+              ),
+              FilledButton(
+                  onPressed: () async {
+                    final usercredenital = await signInWithGoogle();
+                    if (usercredenital.user != null) {
+                      showSnack("Sucessfull register");
+                      showFacultySubjectInDataBase();
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (ctx) => FacultyBranchesPage(
+                             imageUrl: firebaseAuth.currentUser!.photoURL!,
+                            email: firebaseAuth.currentUser!.email!,
+                            name: firebaseAuth.currentUser!.displayName!,
+                          ),
+                        ),
+                      );
+                    } else {
+                      showSnack("register filed");
+                    }
+                  },
+                  child: const Text("Google"))
             ],
           ),
         ),

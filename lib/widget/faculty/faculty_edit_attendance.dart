@@ -1,111 +1,73 @@
-import 'package:attendance1/widget/edit_attendance.dart';
+import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:flutter/material.dart';
-  // Import the PostAttendancePage class from the appropriate file
 
-class FacultyEditAttendance extends StatelessWidget {
-  void _navigateToAttendancePage(BuildContext context, String branch) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PostAttendancePage(branch: branch),
-      ),
-    );
-  }
+class FacultyEditAttendance extends StatefulWidget {
+  FacultyEditAttendance({
+    super.key,
+    required this.roll_number,
+    required this.name,
+    required this.period,
+  });
+
+  final String roll_number;
+  final String name;
+  final String period;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Attendance'),
-        backgroundColor: Colors.blue,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const  Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.school,
-                  size: 30,
-                  color: Colors.black,
-                ),
-                SizedBox(width: 10),
-                Text(
-                  'Faculty',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Button(
-              label: 'Edit 20KP IT Attendance',
-              width: 250,
-              onTap: () {
-                _navigateToAttendancePage(context, '20KP IT');
-              },
-            ),
-            SizedBox(height: 20),
-            Button(
-              label: 'Edit 20KP DS Attendance',
-              width: 250,
-              onTap: () {
-                _navigateToAttendancePage(context, '20KP DS');
-              },
-            ),
-            SizedBox(height: 20),
-            Button(
-              label: 'Edit 21KP IT Attendance',
-              width: 250,
-              onTap: () {
-                _navigateToAttendancePage(context, '21KP IT');
-              },
-            ),
-            SizedBox(height: 20),
-            Button(
-              label: 'Edit 21KP DS Attendance',
-              width: 250,
-              onTap: () {
-                _navigateToAttendancePage(context, '21KP DS');
-              },
-            ),
-            // Add more buttons here...
-          ],
-        ),
-      ),
-    );
-  }
+  State<FacultyEditAttendance> createState() => _FacultyEditAttendanceState();
 }
 
-class Button extends StatelessWidget {
-  final String label;
-  final double width;
-  final VoidCallback onTap;
+class _FacultyEditAttendanceState extends State<FacultyEditAttendance> {
+  bool? attendance = false;
 
-  const Button(
-      {Key? key, required this.label, required this.width, required this.onTap})
-      : super(key: key);
+  @override
+  void initState() {
+    showAttendance();
+    super.initState();
+  }
+
+  void showAttendance() async {
+    await retrieveAttendance(widget.roll_number, widget.period).then((value) {
+      setState(() {
+        attendance = value;
+      });
+    });
+  }
+
+  void updateAttendance(value1) async {
+    await updateAttendanceForPeriodWays(
+      widget.roll_number,
+      widget.period,
+      value1,
+    ).then((value) {
+      setState(() {
+        attendance = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        fixedSize: Size(width, 50),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(color: Colors.white),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Container(
+          decoration: BoxDecoration(
+            gradient:const  LinearGradient(colors: [
+              Colors.white,
+              Colors.lightBlue,
+              Colors.lightGreenAccent,
+              Colors.lightBlueAccent,
+            ]), // Dark background color
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: CheckboxListTile(
+            title: Text(widget.roll_number),
+            subtitle: Text(widget.name),
+            value: attendance,
+            onChanged: (value) {
+              updateAttendance(value);
+            },
+          )),
     );
   }
 }

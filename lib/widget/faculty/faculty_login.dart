@@ -1,4 +1,3 @@
-
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:attendance1/widget/faculty/faculty_branch_list.dart';
@@ -6,16 +5,12 @@ import 'package:flutter/material.dart';
 
 class FacultyLoginScreen extends StatefulWidget {
   @override
-  State<FacultyLoginScreen> createState() =>
-      _FacultyLoginScreenState();
+  State<FacultyLoginScreen> createState() => _FacultyLoginScreenState();
 }
 
 class _FacultyLoginScreenState extends State<FacultyLoginScreen> {
-  
- 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
- 
 
   void showSnack(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -26,8 +21,6 @@ class _FacultyLoginScreenState extends State<FacultyLoginScreen> {
       ),
     );
   }
-
-   
 
   @override
   Widget build(BuildContext context) {
@@ -58,20 +51,45 @@ class _FacultyLoginScreenState extends State<FacultyLoginScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
-                  final result = await signWithEmailAndPassword(
+                  final result = await  createWithEmailAndPassword(
                       _emailController.text, _passwordController.text);
 
                   if (result) {
                     showSnack("Sucess");
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (ctx) => FacultyBranchesPage()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (ctx) => FacultyBranchesPage(
+                          imageUrl: firebaseAuth.currentUser!.photoURL!,
+                              email: firebaseAuth.currentUser!.email!,
+                              name: firebaseAuth.currentUser!.displayName!,
+                            )));
                   } else {
                     showSnack("Failed");
                   }
-                  
                 },
                 child: Text('Login'),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              FilledButton(
+                  onPressed: () async {
+                    final usercredenital = await signInWithGoogle();
+                    if (usercredenital.user != null) {
+                      showSnack("Sucessfull login");
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (ctx) => FacultyBranchesPage(
+                             imageUrl: firebaseAuth.currentUser!.photoURL!,
+                            email: firebaseAuth.currentUser!.email!,
+                            name: firebaseAuth.currentUser!.displayName!,
+                          ),
+                        ),
+                      );
+                    } else {
+                      showSnack("Login filed");
+                    }
+                  },
+                  child: Text("Google"))
             ],
           ),
         ),

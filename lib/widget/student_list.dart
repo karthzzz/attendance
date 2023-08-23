@@ -1,15 +1,14 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class StudentList extends StatefulWidget {
-  // ignore: non_constant_identifier_names
   StudentList({
     super.key,
     required this.roll_number,
     required this.name,
     required this.period,
   });
+
   final String roll_number;
   final String name;
   final String period;
@@ -37,8 +36,10 @@ class _StudentListState extends State<StudentList> {
 
   void updateAttendance(value1) async {
     await updateAttendanceForPeriodWays(
-            widget.roll_number, widget.period, value1)
-        .then((value) {
+      widget.roll_number,
+      widget.period,
+      value1,
+    ).then((value) {
       setState(() {
         attendance = value;
       });
@@ -47,22 +48,38 @@ class _StudentListState extends State<StudentList> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
-        child: Row(
-          children: [
-            Expanded(
-              child: Card(
-                margin:const  EdgeInsets.all(4),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                child: ListTile(
-                  title: Text(widget.name),
-                  subtitle: Text(widget.roll_number),
-                ),
-              )
-            )
-          ],
+        decoration: BoxDecoration(
+          color: Colors.grey[900], // Dark background color
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          title: Text(
+            widget.name,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          subtitle: Text(
+            widget.roll_number,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white70,
+            ),
+          ),
+          trailing: AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: attendance == null
+                ? SizedBox.shrink()
+                : attendance!
+                    ? Icon(Icons.check_circle, color: Colors.green, size: 20)
+                    : Icon(Icons.remove_circle, color: Colors.red, size: 20),
+          ),
         ),
       ),
     );

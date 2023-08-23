@@ -2,7 +2,6 @@ import 'package:attendance1/excel_file_operation/excel_retrieve_data_operation.d
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:file_picker/file_picker.dart';
-
 import 'package:flutter/material.dart';
 
 class Student {
@@ -12,8 +11,7 @@ class Student {
   final String year;
   final String branch_id;
 
-  Student(
-      this.name, this.roll_number, this.section_id, this.year, this.branch_id);
+  Student(this.name, this.roll_number, this.section_id, this.year, this.branch_id);
 }
 
 class FirebaseBranch extends StatefulWidget {
@@ -33,39 +31,27 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
   FilePickerResult? resultPicker;
   List<dynamic>? listOfStudents;
 
-  void showSnackbarScreen(String e) {
+  void showSnackbarScreen(String message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          e,
+          message,
           style: const TextStyle(fontSize: 25),
         ),
         actions: [
           FilledButton.icon(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (ctx) => const BranchesPage()));
-              },
-              icon: const Icon(Icons.emoji_nature_outlined),
-              label: const Text("Okay"))
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => const BranchesPage()));
+            },
+            icon: const Icon(Icons.emoji_nature_outlined),
+            label: const Text("Okay"),
+          ),
         ],
       ),
     );
   }
 
-  // Future<List<String>> getStudentId() async {
-  //   List<String> listOfStudentIds = [];
-
-  //   // ignore: unused_local_variable
-  //   database.child('attendance').onValue.listen((event) {
-  //     DataSnapshot snapshot = event.snapshot;
-  //     if (snapshot.value != null) {
-  //       print(snapshot.value);
-  //     }
-  //   });
-  //   return await listOfStudentIds;
-  // }
   void pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -84,12 +70,11 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
     });
   }
 
-  void enterTheDataIntoTheFirebase() async {
+  void enterDataIntoFirebase() async {
     for (var student in listOfStudents!) {
-      await addBranchYearSectionFromExcel(
-          Student(student[1], student[0], "Section-A", student[3], student[2]));
+      await addBranchYearSectionFromExcel(Student(student[1], student[0], "Section-A", student[3], student[2]));
     }
-    showSnackbarScreen("sucessfull the updation");
+    showSnackbarScreen("Data update successful");
   }
 
   @override
@@ -97,30 +82,34 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Attendance"),
+        backgroundColor: Color(0xFF1E2C3A),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             autovalidateMode: AutovalidateMode.always,
             child: Column(
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 DropdownButtonFormField(
                   value: _branch,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  hint: const Text("Enter branch"),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    hintStyle: TextStyle(color: Colors.grey), // Hint text color
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFE57373)), // Border color when focused
+                    ),
+                  ),
+                  hint: const Text("Select Branch"),
                   icon: const Icon(Icons.home_work_outlined),
                   items: ['CSE', 'DS', 'IT', 'ECE']
                       .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                       .toList(),
                   validator: (value) {
                     if (value == null) {
-                      return "Please enter";
+                      return "Please select";
                     }
                     return null;
                   },
@@ -130,22 +119,24 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 DropdownButtonFormField(
                   value: _year,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  hint: const Text("Enter Year"),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    hintStyle: TextStyle(color: Colors.grey), // Hint text color
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFE57373)), // Border color when focused
+                    ),
+                  ),
+                  hint: const Text("Select Year"),
                   icon: const Icon(Icons.calculate),
                   items: ['20KP', '21KP', '22KP', '23KP']
                       .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                       .toList(),
                   validator: (value) {
                     if (value == null) {
-                      return "Please enter";
+                      return "Please select";
                     }
                     return null;
                   },
@@ -155,22 +146,24 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 DropdownButtonFormField(
                   value: _section,
-                  hint: const Text("Enter Section"),
+                  hint: const Text("Select Section"),
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                    hintStyle: TextStyle(color: Colors.grey), // Hint text color
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFFE57373)), // Border color when focused
+                    ),
+                  ),
                   icon: const Icon(Icons.group),
                   items: ['Section-A', 'Section-B']
                       .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                       .toList(),
                   validator: (value) {
                     if (value == null) {
-                      return "Please enter";
+                      return "Please select";
                     }
                     return null;
                   },
@@ -180,9 +173,7 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Card(
                   child: Column(
                     children: [
@@ -190,26 +181,26 @@ class _FirebaseBranchState extends State<FirebaseBranch> {
                         onPressed: () {
                           pickFile();
                         },
-                        child: _filePath.length == 0
+                        child: _filePath.isEmpty
                             ? Text("Add Excel file")
                             : Text(resultPicker!.names.first.toString()),
-                      )
+                      ),
                     ],
                   ),
                 ),
-                FilledButton.icon(
+                ElevatedButton.icon(
                   onPressed: () {
-                    // await addBranchYearSection(Student(
-                    //     _nameController.text,
-                    //     _rollcontroller.text,
-                    //     _section.toString(),
-                    //     _year.toString(),
-                    //     _branch.toString()));
-                    enterTheDataIntoTheFirebase();
+                    enterDataIntoFirebase();
                     Navigator.of(context).pop();
                   },
                   icon: const Icon(Icons.arrow_downward),
                   label: const Text("Enter"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFFE57373),
+                    textStyle: const TextStyle(fontSize: 16, color: Colors.white),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
                 ),
               ],
             ),

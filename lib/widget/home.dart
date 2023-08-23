@@ -1,11 +1,10 @@
-import 'package:attendance1/excel_file_operation/excel_retrieve_data_operation.dart';
+
+import 'package:attendance1/widget/admin/admin.dart';
 import 'package:attendance1/widget/faculty/faculty_login.dart';
 import 'package:attendance1/widget/faculty/faculty_register.dart';
 import 'package:attendance1/widget/student_home.dart';
 import 'package:flutter/material.dart';
  
-import 'admin/admin.dart';
-
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -13,16 +12,30 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NRIIT'),
-        backgroundColor: Colors.blue,
+        title: Text('NRIIT Attendance'),
+        elevation: 0, // Remove shadow from app bar
+        backgroundColor: Color(0xFF1E2C3A), // Dark blue app bar color
       ),
-      body: Center(
+      body: Container(
+        color: const Color(0xFF15202B), // Darker background color
+        padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Button(
+            const SizedBox(height: 40),
+            const Text(
+              'Hello, Attendees!',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            ButtonWithImage(
               label: 'Admin',
               icon: Icons.admin_panel_settings,
+              color: const Color(0xFFE57373), // Light red button color
               onPressed: () {
                 Navigator.push(
                   context,
@@ -32,32 +45,34 @@ class Home extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 20),
-            Button(
-                label: 'Faculty',
-                icon: Icons.school,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FacultyLoginScreen(),
-                    ),
-                  );
-                }),
-            SizedBox(height: 20),
-            Button(
-                label: 'Student',
-                icon: Icons.person,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => StudentHome(),
-                    ),
-                  );
-                  // Add navigation logic for Student
-                }),
-             
+            const SizedBox(height: 10),
+            ButtonWithImage(
+              label: 'Faculty',
+              icon: Icons.school,
+              color: const Color(0xFF81C784), // Light green button color
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FacultyRegistrationScreen(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            ButtonWithImage(
+              label: 'Student',
+              icon: Icons.person,
+              color: const Color(0xFF9575CD), // Light purple button color
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StudentHome(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -65,31 +80,40 @@ class Home extends StatelessWidget {
   }
 }
 
-class Button extends StatelessWidget {
+class ButtonWithImage extends StatelessWidget {
   final String label;
   final IconData icon;
+  final Color color;
   final VoidCallback? onPressed;
 
-  const Button(
-      {Key? key, required this.label, required this.icon, this.onPressed})
-      : super(key: key);
+  const ButtonWithImage({
+    Key? key,
+    required this.label,
+    required this.icon,
+    required this.color,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
+    return ElevatedButton(
       onPressed: onPressed,
-      icon: Icon(icon),
-      label: Text(
-        label,
-        style: TextStyle(color: Colors.white),
-      ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        primary: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
-        fixedSize: Size(200, 50),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 24),
+          const SizedBox(width: 10),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 18),
+          ),
+        ],
       ),
     );
   }

@@ -15,12 +15,12 @@ class BranchesPage extends StatefulWidget {
 class _BranchesPageState extends State<BranchesPage> {
   List<Branch> presentBranches = [];
   List<String> presentDates = [];
-  String dateDropDown = "";
+  String dateDropDown = '';
+  final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   void showSnackbarScreen(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -50,77 +50,99 @@ class _BranchesPageState extends State<BranchesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: Row(
-        children: [
-          FilledButton.icon(
-              onPressed: () async {
-                final result = await signOut();
-                if (result) {
-                  showSnackbarScreen("signOutSucessfull");
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (ctx) => LoginPage()));
-                } else {
-                  showSnackbarScreen("SignOut Rejected");
-                }
-              },
-              icon: Icon(Icons.logout_outlined),
-              label: const Text("Log Out"))
-        ],
-      ),
       appBar: AppBar(
         title: const Text('BRANCHES'),
         actions: [
-          FilledButton(
-            onPressed: () async {
-              await database.set({});
-              showSnackbarScreen("clear is successfull");
-            },
-            child: const Text("Clear"),
-          ),
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'BRANCHES',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              children: [
-                ...presentBranches.map((e) => BranchButton(
-                      name: e.name,
-                      date: dateDropDown,
-                    ))
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
             child: ElevatedButton(
               onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FirebaseBranch(),
-                  ),
-                );
+                await database.set({});
+                showSnackbarScreen('Clear is successful');
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                textStyle: const TextStyle(fontSize: 20, color: Colors.white),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                primary: Color(0xFFE57373),
+                textStyle: const TextStyle(fontSize: 16, color: Colors.white),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: const Text('Update'),
+              child: const Text('Clear'),
             ),
           ),
         ],
+        elevation: 0,
+        backgroundColor: Color(0xFF1E2C3A),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async{
+          await retrieveBranches().then((value) {
+            setState(() {
+              presentBranches = value;
+            });
+          });
+          return Future<void>.delayed(const Duration(seconds: 3));
+
+        },
+        key: refreshIndicatorKey,
+        strokeWidth: 10,
+        color: Colors.lightBlue,
+        child: Container(
+          color: Color(0xFF15202B),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  children: [
+                    ...presentBranches.map((e) => BranchButton(
+                          name: e.name,
+                          date: dateDropDown,
+                        ))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FirebaseBranch(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    textStyle: const TextStyle(fontSize: 20, color: Colors.white),
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Update'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final result = await signOut();
+          if (result) {
+            showSnackbarScreen('Sign Out Successful');
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => LoginPage()));
+          } else {
+            showSnackbarScreen('Sign Out Rejected');
+          }
+        },
+        label: const Text('Log Out'),
+        icon: Icon(Icons.logout_outlined),
+        backgroundColor: Color(0xFFE57373),
       ),
     );
   }
@@ -140,42 +162,69 @@ class BranchButton extends StatefulWidget {
 }
 
 class _BranchButtonState extends State<BranchButton> {
-  void showAlearDailgo(String branchName) {
+  void showAlertDialog(String branchName) {
     showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-              title: const Text("Choose section"),
-              content: Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => ListOfStudent(
-                                    branch: branchName,
-                                    section: "Section-A",
-                                   
-                                  )));
-                        },
-                        child: const Text("Section-A")),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) => ListOfStudent(
-                                branch: branchName,
-                                section: 'Section-B',
-                               
-                              ),
-                            ),
-                          );
-                        },
-                        child: const Text("Section-B")),
-                  ],
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          'Choose Section',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Color(0xFF1E2C3A),
+        content: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => ListOfStudent(
+                      branch: branchName,
+                      section: 'Section-A',
+                    ),
+                  ));
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFE57373),
+                  textStyle: TextStyle(fontSize: 16, color: Colors.white),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
+                child: const Text('Section-A'),
               ),
-            ));
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) => ListOfStudent(
+                        branch: branchName,
+                        section: 'Section-B',
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFE57373),
+                  textStyle: TextStyle(fontSize: 16, color: Colors.white),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text('Section-B'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -184,12 +233,15 @@ class _BranchButtonState extends State<BranchButton> {
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ElevatedButton(
         onPressed: () {
-          showAlearDailgo(widget.name);
+          showAlertDialog(widget.name);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
-          textStyle: const TextStyle(fontSize: 20, color: Colors.white),
+          primary: Color(0xFFE57373),
+          textStyle: const TextStyle(fontSize: 16, color: Colors.white),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,16 +249,16 @@ class _BranchButtonState extends State<BranchButton> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.business),
+                const Icon(Icons.business, color: Colors.white),
                 const SizedBox(width: 10),
-                Text(widget.name),
+                Text(widget.name, style: TextStyle(color: Colors.white)),
               ],
             ),
             IconButton(
               onPressed: () {
                 // Add action for delete
               },
-              icon: const Icon(Icons.delete),
+              icon: const Icon(Icons.delete, color: Colors.white),
             ),
           ],
         ),

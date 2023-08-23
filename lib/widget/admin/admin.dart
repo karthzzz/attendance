@@ -1,9 +1,6 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/widget/admin/admin_branch_page.dart';
-import 'package:attendance1/widget/register.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'admin_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -15,6 +12,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -24,75 +22,115 @@ class _LoginPageState extends State<LoginPage> {
 
   void showSnack(String message) {
     showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-              title: Text(
-                message,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ));
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          message,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Register Page'),
+        title: Text('Admin Login'),
+        elevation: 0,
+        backgroundColor: Color(0xFF1E2C3A),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'ADMIN',
-            style: TextStyle(
-                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.green),
-          ),
-          const SizedBox(height: 40),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                hintText: 'Email',
-                border: OutlineInputBorder(),
+      body: Container(
+        color: Color(0xFF15202B),
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'ADMIN',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextField(
+            SizedBox(height: 20),
+            TextField(
+              style: TextStyle(color: Colors.white),
+              controller: _emailController,
+              decoration: InputDecoration(
+                hintText: 'Email',
+                hintStyle: TextStyle(color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
               controller: _passwordController,
-              decoration:const InputDecoration(
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
                 hintText: 'Password',
-                border: OutlineInputBorder(),
+                hintStyle: TextStyle(color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
+                ),
               ),
               obscureText: true,
             ),
-          ),
-          const SizedBox(height: 40),
-          ElevatedButton(
-            onPressed: () async {
-              final result = await signWithEmailAndPassword(_emailController.text, _passwordController.text);
-              if(result){
-                showSnack("Sucess");
-                Navigator.of(context)
-                    .pushReplacement(MaterialPageRoute(builder: (ctx) => BranchesPage()));
-              }
-              else{
-                showSnack("Failed");
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Colors.green,
-              textStyle: const TextStyle(fontSize: 20, color: Colors.white),
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                final result = await signWithEmailAndPassword(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+                if (result) {
+                  showSnack("Success");
+                  // Navigator.of(context).pushReplacement(
+                    // MaterialPageRoute(builder: (ctx) print('');=> BranchesPage()),
+                  // );
+                } else {
+                  showSnack("Failed");
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+                textStyle: TextStyle(fontSize: 16, color: Colors.white),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text('Login'),
             ),
-            child: const Text('Login'),
-          ),
-           
-           
-        ],
+            const SizedBox(
+              height: 20,
+            ),
+            FilledButton(
+                onPressed: () async {
+                  final usercredenital = await signInWithGoogle();
+                  if (usercredenital.user != null) {
+                    showSnack("Sucessfull login");
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (ctx) => const BranchesPage(),
+                      ),
+                    );
+                  } else {
+                    showSnack("Login filed");
+                  }
+                },
+                child: Text("Google"))
+          ],
+        ),
       ),
     );
   }

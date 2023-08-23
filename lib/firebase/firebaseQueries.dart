@@ -2,7 +2,6 @@ import 'package:attendance1/model/modelClass.dart';
 import 'package:attendance1/widget/addClass.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final googleSignIn = GoogleSignIn();
@@ -32,7 +31,7 @@ Future<UserCredential> signInWithGoogle() async {
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
 
-Future<Object> createWithEmailAndPassword(String email, String passowrd) async {
+Future<bool> createWithEmailAndPassword(String email, String passowrd) async {
   UserCredential? credential;
   try {
     credential = await firebaseAuth.createUserWithEmailAndPassword(
@@ -42,17 +41,21 @@ Future<Object> createWithEmailAndPassword(String email, String passowrd) async {
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
       print('The password provided is too weak.');
+      return false;
     } else if (e.code == 'email-already-in-use') {
       print('The account already exists for that email.');
+      return false;
     }
   } catch (e) {
     print(e);
+    return false;
   }
-  if (credential != null) {
+   if (credential!.user != null) {
     print(credential);
-    return credential;
+    return true;
   }
-  return true;
+
+  return false;
 }
 
 Future<bool> signWithEmailAndPassword(String email, String password) async {
@@ -120,13 +123,13 @@ Future<bool> retrieveAttendance(String roll_number, String period) async {
       .orderByChild(roll_number)
       .once();
   final result = dateAttendanceDatabase.snapshot.value as Map;
-  bool? attendance;
+  bool attendance = false;
   result.forEach((key, value) {
     if (key == roll_number) {
       attendance = value[period];
     }
   });
-  return attendance!;
+  return attendance;
 }
 
 Future<bool> updateAttendanceForPeriodWays(
@@ -290,9 +293,6 @@ Future<List<String>> retrieveSections() async {
   return sectionList;
 }
 
-
-
-
 Future<List<Student>> retrieveStudentsFromBranchSectionAndYear(
     String branch, String section, String year) async {
   final studentDatabase = database.child('students');
@@ -317,3 +317,49 @@ Future<List<Student>> retrieveStudentsFromBranchSectionAndYear(
   });
   return students;
 }
+
+Future<bool> createAttendanceForStudent(
+  String roll_number,
+  String date,
+  List<String> periods,
+  String subject,
+  String teacherName,
+) async {
+  final attendanceDatabase = database.child('/attendance/$date-$roll_number');
+  attendanceDatabase.set({
+    'student_Id': roll_number,
+    'date': date,
+  });
+
+  for (var period in periods) {
+    final attendancePeriodDatabase =
+        database.child('/attendance/$date-$roll_number/$period');
+    attendancePeriodDatabase.set({
+      'subject': subject,
+      'teacher': teacherName,
+      'attendance': false,
+    });
+  }
+
+  return true;
+}
+
+
+Future<List<String>> retrieveSubjectsFromTeacher(String facultyName) async{
+  final facultyDatabase = await database.child('faculty').once();
+  final facultyData = facultyDatabase.snapshot.value as Map;
+  List<String> subjects = [];
+  facultyData.forEach((key, value) async {
+    if (key == facultyName) {
+      final facultyDataBaseFromSubject = await database.child('faculty/$key/subjects').once();
+      final facultyDataFromSubject = facultyDataBaseFromSubject.snapshot.value as Map;
+      facultyDataFromSubject.forEach((key, value) {
+        subjects.add(value);
+      });
+    }
+  });
+  print(subjects);
+  print('Hello Madan');
+  return subjects;
+}
+

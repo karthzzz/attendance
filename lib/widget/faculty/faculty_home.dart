@@ -1,5 +1,4 @@
-import 'package:attendance1/widget/faculty/faculty_edit_attendance.dart';
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'faculty_post_attendance.dart'; // Import the faculty_post_attendance.dart file
  // Import the faculty_edit_attendance.dart file
 
@@ -33,7 +32,7 @@ class FacultyHome extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => FacultyEditAttendance()),
+                        builder: (context) => const Center(child: Text("Madan"),)),
                   );
                 }),
           ],
