@@ -50,7 +50,7 @@ Future<bool> createWithEmailAndPassword(String email, String passowrd) async {
     print(e);
     return false;
   }
-   if (credential!.user != null) {
+  if (credential!.user != null) {
     print(credential);
     return true;
   }
@@ -129,6 +129,7 @@ Future<bool> retrieveAttendance(String roll_number, String period) async {
       attendance = value[period];
     }
   });
+   
   return attendance;
 }
 
@@ -153,6 +154,11 @@ Future<bool> updateAttendanceForPeriodWays(
       attendance = value[period];
     }
   });
+
+  database
+      .child(
+          '/Daily attendance/${dateTime.day}-${dateTime.month}-${dateTime.year}-$roll_number/$period')
+      .update({'attendance': attendance});
 
   return attendance!;
 }
@@ -321,45 +327,57 @@ Future<List<Student>> retrieveStudentsFromBranchSectionAndYear(
 Future<bool> createAttendanceForStudent(
   String roll_number,
   String date,
-  List<String> periods,
+  String period,
   String subject,
   String teacherName,
 ) async {
-  final attendanceDatabase = database.child('/attendance/$date-$roll_number');
+  final attendanceDatabase =
+      database.child('/Daily attendance/$date-$roll_number');
   attendanceDatabase.set({
     'student_Id': roll_number,
     'date': date,
   });
-
-  for (var period in periods) {
-    final attendancePeriodDatabase =
-        database.child('/attendance/$date-$roll_number/$period');
-    attendancePeriodDatabase.set({
-      'subject': subject,
-      'teacher': teacherName,
-      'attendance': false,
-    });
-  }
+  final attendancePeriodDatabase =
+      database.child('/Daily attendance/$date-$roll_number/$period');
+  attendancePeriodDatabase.set({
+    'subject': subject,
+    'teacher': teacherName,
+    'attendance': false,
+  });
 
   return true;
 }
 
-
-Future<List<String>> retrieveSubjectsFromTeacher(String facultyName) async{
-  final facultyDatabase = await database.child('faculty').once();
-  final facultyData = facultyDatabase.snapshot.value as Map;
+Future<List<String>> retrieveSubjectsFromTeacher(String facultyName) async {
+  final subject = await database.child('subject').once();
   List<String> subjects = [];
-  facultyData.forEach((key, value) async {
-    if (key == facultyName) {
-      final facultyDataBaseFromSubject = await database.child('faculty/$key/subjects').once();
-      final facultyDataFromSubject = facultyDataBaseFromSubject.snapshot.value as Map;
-      facultyDataFromSubject.forEach((key, value) {
-        subjects.add(value);
-      });
-    }
+  final subjectList = subject.snapshot.value as Map;
+  subjectList.forEach((key, value) {
+    subjects.add(key);
   });
+
   print(subjects);
-  print('Hello Madan');
   return subjects;
+}
+
+Future<List<Student>> retrieveStudentsOnly() async{
+  final studentDatabase = database.child('students');
+  List<Student> listOfStudents = [];
+  await studentDatabase.once().then((value) {
+    final studentList = value.snapshot.value as Map;
+    studentList.forEach((key, value) {
+      listOfStudents.add(Student(
+        value['name'],
+        value['roll_number'],
+        value['section_id'],
+        value['year'],
+        value['branch_id'],
+      ));
+    });
+    });
+
+    print(listOfStudents);
+
+  return listOfStudents;
 }
 

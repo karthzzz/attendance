@@ -94,9 +94,10 @@ class _LoginPageState extends State<LoginPage> {
                 );
                 if (result) {
                   showSnack("Success");
-                  // Navigator.of(context).pushReplacement(
-                    // MaterialPageRoute(builder: (ctx) print('');=> BranchesPage()),
-                  // );
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (ctx)  => BranchesPage()),
+                  );
                 } else {
                   showSnack("Failed");
                 }

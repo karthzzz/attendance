@@ -11,13 +11,59 @@ class FacultyRegistrationScreen extends StatefulWidget {
 }
 
 class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
-  final List<String> subjects = [
-    'Math',
-    'Science',
-    'History',
-    'English',
-    'Art'
-  ];
+  List<String> subjects = [
+  "Communicative English",
+  "Mathematics – I",
+  "Applied Chemistry",
+  "Programming for Problem Solving using C",
+  "Computer Engineering Workshop",
+  "English Communication Skills Laboratory",
+  "Applied Chemistry Lab",
+  "Programming for Problem Solving using C Lab",
+  "Mathematics – II",
+  "Applied Physics",
+  "Digital Logic Design",
+  "Python Programming",
+  "Data Structures",
+  "Applied Physics Lab",
+  "Python Programming Lab",
+  "Data Structures Lab",
+  "Mathematics III",
+  "Mathematical Foundations of Computer Science",
+  "Fundamentals of Data Science",
+  "Object Oriented Programming with Java",
+  "Database Management Systems",
+  "Fundamentals of Data Science Lab",
+  "Object Oriented Programming with Java Lab",
+  "Database Management Systems Lab",
+  "Mobile App Development",
+  "Essence of Indian Traditional Knowledge",
+  "Probability and Statistics",
+  "Computer Organization",
+  "Data Warehousing and Mining",
+  "Formal Languages and Automata Theory",
+  "Managerial Economics and Financial Accountancy",
+  "R Programming Lab",
+  "Data Mining using Python Lab",
+  "Web Application Development Lab",
+  "MongoDB",
+  "Computer Networks",
+  "Big Data Analytics",
+  "Design and Analysis of Algorithms",
+  "Professional Elective-II",
+  "Open Elective-II",
+  "Computer Networks Lab",
+  "Big Data Analytics Lab",
+  "Deep Learning with TensorFlow",
+  "Skill Oriented Course - IV",
+  "Professional Elective-III",
+  "Professional Elective-IV",
+  "Professional Elective-V",
+  "Open Elective-III",
+  "Universal Human Values 2: Understanding Harmony",
+  "Major Project Work, Seminar Internship"
+];
+
  
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -53,6 +99,7 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
       appBar: AppBar(
         title: const Text('Faculty Registration'),
       ),
+      backgroundColor: Colors.lightBlue[50],
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -96,7 +143,7 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
                 onPressed: () async {
                   final result = await  createWithEmailAndPassword(
                       _emailController.text, _passwordController.text);
-
+        
                   if (result) {
                     showSnack("Sucess");
                     showFacultySubjectInDataBase();

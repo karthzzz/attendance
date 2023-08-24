@@ -45,7 +45,7 @@ class _FacultyStudentListState extends State<FacultyStudentList> {
   @override
   void initState() {
     showStudents(widget.section, widget.branch);
-
+     
     super.initState();
   }
 
@@ -57,17 +57,9 @@ class _FacultyStudentListState extends State<FacultyStudentList> {
         },
       ),
     );
-    presentStudent.map((e) async {
-      await createAttendanceForStudent(
-        e.roll_number,
-        widget.date,
-        selectPeriod,
-        widget.subject,
-        widget.teacherName,
-      );
-    });
   }
 
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,6 +96,7 @@ class _FacultyStudentListState extends State<FacultyStudentList> {
                   (e) => FacultyEditAttendance(
                       roll_number: e.roll_number,
                       name: e.name,
+                      subject: widget.subject,
                       period: selectPeriod[0],
                       key: GlobalKey()),
                 )

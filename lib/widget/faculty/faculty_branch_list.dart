@@ -2,6 +2,7 @@ import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/model/modelClass.dart';
 import 'package:attendance1/widget/addClass.dart';
 import 'package:attendance1/widget/admin/admin.dart';
+import 'package:attendance1/widget/faculty/faculty_login.dart';
 import 'package:attendance1/widget/faculty/faculty_student_list.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
@@ -83,7 +84,7 @@ class _FacultyBranchesPageState extends State<FacultyBranchesPage> {
                     if (result) {
                       showSnackbarScreen("signOutSucessfull");
                       Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (ctx) => LoginPage()));
+                          MaterialPageRoute(builder: (ctx) => FacultyLoginScreen()));
                     } else {
                       showSnackbarScreen("SignOut Rejected");
                     }
@@ -189,6 +190,8 @@ class _FacultyBranchButtonState extends State<FacultyBranchButton> {
         listOfSubjects = value;
       });
     });
+
+    print(listOfSubjects);
      
   }
 
@@ -250,10 +253,11 @@ class _FacultyBranchButtonState extends State<FacultyBranchButton> {
                 child: DropDownMultiSelect(
                   options: listOfYears,
                   decoration: InputDecoration(
+                    labelText: "Select Year",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      hintText: "Select Year"),
+                      ),
                   validator: (selectedOptions) {
                     if (selectedOptions == null) {
                       return "Invaild";
@@ -276,33 +280,11 @@ class _FacultyBranchButtonState extends State<FacultyBranchButton> {
                 child: DropDownMultiSelect(
                   options: listOfSections,
                   decoration: InputDecoration(
+                    labelText: "Select Section",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      hintText: "Select Subject"),
-                  validator: (selectedOptions) {
-                    if (selectedOptions == null) {
-                      return "Invaild";
-                    }
-                    return "ok";
-                  },
-                  selectedValues: selecedSection,
-                  onChanged: (p0) {
-                    setState(() {
-                      selectedSubject = p0;
-                    });
-                  },
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropDownMultiSelect(
-                  options: listOfSubjects,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                      hintText: "Select subject"),
                   validator: (selectedOptions) {
                     if (selectedOptions == null) {
                       return "Invaild";
@@ -313,6 +295,30 @@ class _FacultyBranchButtonState extends State<FacultyBranchButton> {
                   onChanged: (p0) {
                     setState(() {
                       selecedSection = p0;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropDownMultiSelect(
+                  options: listOfSubjects,
+                  decoration: InputDecoration(
+                    labelText: "Select Subject",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                       ),
+                  validator: (selectedOptions) {
+                    if (selectedOptions == null) {
+                      return "Invaild";
+                    }
+                    return "ok";
+                  },
+                  selectedValues: selectedSubject,
+                  onChanged: (p0) {
+                    setState(() {
+                      selectedSubject = p0;
                     });
                   },
                 ),

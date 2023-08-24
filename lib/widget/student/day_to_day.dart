@@ -1,3 +1,5 @@
+import 'package:attendance1/firebase/firebaseQueries.dart';
+import 'package:attendance1/widget/addClass.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -23,31 +25,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Student> presentStudent = [];
   DateTime selectedDate = DateTime.now();
+  List<String> listAttendance = [];
 
-  List<DataColumn> _getColumnHeaders() {
-    final headers = ['Roll No', 'I', 'II', '...', 'Total'];
-    return headers
-        .map<DataColumn>((header) =>
-            DataColumn(label: SizedBox(width: 50, child: Text(header))))
-        .toList();
+  @override
+  void initState() {
+    retrieveStudents();
+    retrieveAttendanceForPeriod("period1");
+    super.initState();
   }
 
-  List<DataRow> _getTableRows() {
-    final rows = <DataRow>[];
-
-    // Create fewer empty rows
-    for (int i = 1; i <= 5; i++) {
-      rows.add(DataRow(cells: [
-        DataCell(SizedBox(width: 50, child: Text(''))),
-        for (int j = 1; j <= 2; j++)
-          DataCell(SizedBox(width: 50, child: Text(''))),
-        DataCell(SizedBox(width: 50, child: Text('...'))),
-        DataCell(SizedBox(width: 50, child: Text(''))),
-      ]));
-    }
-
-    return rows;
+  void retrieveStudents() async {
+    await retrieveStudentsOnly().then((value) {
+      setState(() {
+        presentStudent = value;
+      });
+    });
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -65,6 +59,18 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void retrieveAttendanceForPeriod(String period) async {
+    for (var student in presentStudent) {
+      await retrieveAttendance(student.roll_number, period).then((value) {
+        setState(() {
+          listAttendance.add(value.toString());
+        });
+      });
+    }
+  }
+
+  int count = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,45 +79,107 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            SizedBox(height: 20.0),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search Roll Number',
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: [
-                Text(
-                  'Date:',
-                  style: TextStyle(fontSize: 18),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 20.0),
+              const TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search Roll Number',
+                  prefixIcon: Icon(Icons.search),
                 ),
-                SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () => _selectDate(context),
-                  child: Text(
-                    "${selectedDate.toLocal()}".split(' ')[0],
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+              ),
+              const SizedBox(height: 20.0),
+              Row(
+                children: [
+                  const Text(
+                    'Date:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () => _selectDate(context),
+                    child: Text(
+                      "${selectedDate.toLocal()}".split(' ')[0],
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20.0),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columnSpacing: 4, // Adjust the spacing between columns
-                columns: _getColumnHeaders(),
-                rows: _getTableRows(),
+                ],
               ),
-            ),
-          ],
+
+              const SizedBox(height: 20.0),
+              //create the data table in flutter
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text(
+                        'Roll Number',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Name',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Period1',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: presentStudent
+                      .map(
+                        (student) => DataRow(
+                          cells: [
+                            DataCell(
+                              Text(
+                                student.roll_number,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                student.name,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                listAttendance[count++],
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

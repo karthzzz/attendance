@@ -6,12 +6,13 @@ class FacultyEditAttendance extends StatefulWidget {
     super.key,
     required this.roll_number,
     required this.name,
-    required this.period,
+    required this.period, required this.subject,
   });
 
   final String roll_number;
   final String name;
   final String period;
+  final String subject;
 
   @override
   State<FacultyEditAttendance> createState() => _FacultyEditAttendanceState();
@@ -19,10 +20,12 @@ class FacultyEditAttendance extends StatefulWidget {
 
 class _FacultyEditAttendanceState extends State<FacultyEditAttendance> {
   bool? attendance = false;
+  DateTime dateTime = DateTime.now();
 
   @override
   void initState() {
     showAttendance();
+    setAttendanceFaculty();
     super.initState();
   }
 
@@ -45,6 +48,19 @@ class _FacultyEditAttendanceState extends State<FacultyEditAttendance> {
       });
     });
   }
+
+  void setAttendanceFaculty()  async{
+      await createAttendanceForStudent(
+        widget.roll_number,
+        '${dateTime.day}-${dateTime.month}-${dateTime.year}',
+        widget.period,
+        widget.subject,
+        firebaseAuth.currentUser!.displayName!,
+      );
+    }
+    
+  
+
 
   @override
   Widget build(BuildContext context) {

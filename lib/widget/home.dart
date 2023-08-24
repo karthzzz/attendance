@@ -2,7 +2,8 @@
 import 'package:attendance1/widget/admin/admin.dart';
 import 'package:attendance1/widget/faculty/faculty_login.dart';
 import 'package:attendance1/widget/faculty/faculty_register.dart';
-import 'package:attendance1/widget/student_home.dart';
+import 'package:attendance1/widget/student/student_home.dart';
+import 'package:attendance1/widget/student/student_login_register.dart';
 import 'package:flutter/material.dart';
  
 class Home extends StatelessWidget {
@@ -68,7 +69,7 @@ class Home extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => StudentHome(),
+                    builder: (context) => StudentLoginRegister(),
                   ),
                 );
               },
