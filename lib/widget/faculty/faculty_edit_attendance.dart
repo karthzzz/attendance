@@ -6,12 +6,13 @@ class FacultyEditAttendance extends StatefulWidget {
     super.key,
     required this.roll_number,
     required this.name,
-    required this.period, required this.subject,
+    required this.subject,
+    required this.periods,
   });
 
   final String roll_number;
   final String name;
-  final String period;
+  final List<String> periods;
   final String subject;
 
   @override
@@ -30,7 +31,8 @@ class _FacultyEditAttendanceState extends State<FacultyEditAttendance> {
   }
 
   void showAttendance() async {
-    await retrieveAttendance(widget.roll_number, widget.period).then((value) {
+    await retrieveAttendance(widget.roll_number, widget.periods[0])
+        .then((value) {
       setState(() {
         attendance = value;
       });
@@ -38,29 +40,48 @@ class _FacultyEditAttendanceState extends State<FacultyEditAttendance> {
   }
 
   void updateAttendance(value1) async {
-    await updateAttendanceForPeriodWays(
-      widget.roll_number,
-      widget.period,
-      value1,
-    ).then((value) {
-      setState(() {
-        attendance = value;
+    if (widget.periods.length == 1) {
+      await updateAttendanceForPeriodWays(
+        widget.roll_number,
+        widget.periods[0],
+        value1,
+      ).then((value) {
+        setState(() {
+          attendance = value;
+        });
       });
-    });
+    } else if (widget.periods.length > 1) {
+      await updateAttendanceForListPeriods(
+        widget.roll_number,
+        widget.periods,
+        value1,
+      ).then((value) {
+        setState(() {
+          attendance = value;
+        });
+      });
+    }
   }
 
-  void setAttendanceFaculty()  async{
+  void setAttendanceFaculty() async {
+    if (widget.periods.length == 1) {
       await createAttendanceForStudent(
         widget.roll_number,
         '${dateTime.day}-${dateTime.month}-${dateTime.year}',
-        widget.period,
+        widget.periods[0],
+        widget.subject,
+        firebaseAuth.currentUser!.displayName!,
+      );
+    } else if (widget.periods.length > 1) {
+      await createAttendanceForStudentEveryPeriods(
+        widget.roll_number,
+        '${dateTime.day}-${dateTime.month}-${dateTime.year}',
+        widget.periods,
         widget.subject,
         firebaseAuth.currentUser!.displayName!,
       );
     }
-    
-  
-
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +89,7 @@ class _FacultyEditAttendanceState extends State<FacultyEditAttendance> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
           decoration: BoxDecoration(
-            gradient:const  LinearGradient(colors: [
+            gradient: const LinearGradient(colors: [
               Colors.white,
               Colors.lightBlue,
               Colors.lightGreenAccent,

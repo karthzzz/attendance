@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'admin_branch_page.dart';
-import '../attendance_page.dart';
+import 'attendance_page.dart';
 
 class HomePage extends StatelessWidget {
   @override

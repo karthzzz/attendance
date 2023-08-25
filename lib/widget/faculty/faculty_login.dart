@@ -1,5 +1,4 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
-import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:attendance1/widget/faculty/faculty_branch_list.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +52,7 @@ class _FacultyLoginScreenState extends State<FacultyLoginScreen> {
                 onPressed: () async {
                   final result = await  createWithEmailAndPassword(
                       _emailController.text, _passwordController.text);
-
+        
                   if (result) {
                     showSnack("Sucess");
                     Navigator.of(context).pushReplacement(MaterialPageRoute(

@@ -129,7 +129,7 @@ Future<bool> retrieveAttendance(String roll_number, String period) async {
       attendance = value[period];
     }
   });
-   
+
   return attendance;
 }
 
@@ -348,6 +348,32 @@ Future<bool> createAttendanceForStudent(
   return true;
 }
 
+Future<bool> createAttendanceForStudentEveryPeriods(
+  String roll_number,
+  String date,
+  List<String> periods,
+  String subject,
+  String teacherName,
+) async {
+  final attendanceDatabase =
+      database.child('/Daily attendance/$date-$roll_number');
+  attendanceDatabase.set({
+    'student_Id': roll_number,
+    'date': date,
+  });
+
+  for (var i = 0; i < periods.length; i++) {
+    final attendancePeriodDatabase =
+        database.child('/Daily attendance/$date-$roll_number/$periods[i]');
+    await attendancePeriodDatabase.set({
+      'subject': subject,
+      'teacher': teacherName,
+      'attendance': false,
+    });
+  }
+  return true;
+}
+
 Future<List<String>> retrieveSubjectsFromTeacher(String facultyName) async {
   final subject = await database.child('subject').once();
   List<String> subjects = [];
@@ -360,7 +386,7 @@ Future<List<String>> retrieveSubjectsFromTeacher(String facultyName) async {
   return subjects;
 }
 
-Future<List<Student>> retrieveStudentsOnly() async{
+Future<List<Student>> retrieveStudentsOnly() async {
   final studentDatabase = database.child('students');
   List<Student> listOfStudents = [];
   await studentDatabase.once().then((value) {
@@ -374,10 +400,47 @@ Future<List<Student>> retrieveStudentsOnly() async{
         value['branch_id'],
       ));
     });
-    });
+  });
 
-    print(listOfStudents);
+  print(listOfStudents);
 
   return listOfStudents;
 }
 
+Future<bool> updateAttendanceForListPeriods(
+    String roll_number, List<String> periods, bool changedValue) async {
+  print(roll_number);
+  DateTime dateTime = DateTime.now();
+
+  periods.map((period) async {
+    final dateAttendanceDatabase = await database
+        .child('attendance')
+        .child('${dateTime.day}-${dateTime.month}-${dateTime.year}')
+        .child(roll_number)
+        .update({period: changedValue});
+  });
+
+  final dateAttendanceDatabase1 = await database
+      .child('attendance')
+      .child('${dateTime.day}-${dateTime.month}-${dateTime.year}')
+      .orderByChild(roll_number)
+      .once();
+  final result = dateAttendanceDatabase1.snapshot.value as Map;
+  bool? attendance;
+  periods.map((period) {
+    result.forEach((key, value) {
+      if (key == roll_number) {
+        attendance = value[period];
+      }
+    });
+  });
+
+  periods.map((period) {
+    database
+        .child(
+            '/Daily attendance/${dateTime.day}-${dateTime.month}-${dateTime.year}-$roll_number/$period')
+        .update({'attendance': attendance});
+  });
+
+  return attendance!;
+}

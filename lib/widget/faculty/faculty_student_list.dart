@@ -1,7 +1,6 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/widget/faculty/faculty_edit_attendance.dart';
 import 'package:attendance1/widget/student_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
 
@@ -45,7 +44,7 @@ class _FacultyStudentListState extends State<FacultyStudentList> {
   @override
   void initState() {
     showStudents(widget.section, widget.branch);
-     
+
     super.initState();
   }
 
@@ -59,21 +58,32 @@ class _FacultyStudentListState extends State<FacultyStudentList> {
     );
   }
 
-   
   @override
   Widget build(BuildContext context) {
+    void showSnack(String message) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.branch} - ${widget.section}'),
       ),
       body: SingleChildScrollView(
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Colors.white10, Colors.lightBlue, Colors.green])),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if(presentStudent.length >=1)
+              const Text("please select one or more period"),
               DropDownMultiSelect(
                 options: listOfPeriod,
                 validator: (selectedOptions) {
@@ -84,20 +94,23 @@ class _FacultyStudentListState extends State<FacultyStudentList> {
                 },
                 selectedValues: selectPeriod,
                 onChanged: (p0) {
-                  setState(() {
-                    selectPeriod = p0;
-                  });
+                  if (selectPeriod.length >= 1){
+                    setState(() {
+                      selectPeriod = p0;
+                    });
+                  }
                 },
               ),
+               
               if (isChangePeriod)
-                CircularProgressIndicator()
+                const CircularProgressIndicator()
               else
                 ...presentStudent.map(
                   (e) => FacultyEditAttendance(
                       roll_number: e.roll_number,
                       name: e.name,
                       subject: widget.subject,
-                      period: selectPeriod[0],
+                      periods: selectPeriod,
                       key: GlobalKey()),
                 )
             ],
