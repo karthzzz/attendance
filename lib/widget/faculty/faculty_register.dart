@@ -3,7 +3,6 @@ import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:attendance1/widget/faculty/faculty_branch_list.dart';
 import 'package:attendance1/widget/faculty/faculty_login.dart';
 import 'package:flutter/material.dart';
-import 'package:multiselect/multiselect.dart';
 
 class FacultyRegistrationScreen extends StatefulWidget {
   @override
@@ -13,58 +12,59 @@ class FacultyRegistrationScreen extends StatefulWidget {
 
 class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
   List<String> subjects = [
-    "Communicative English",
-    "Mathematics – I",
-    "Applied Chemistry",
-    "Programming for Problem Solving using C",
-    "Computer Engineering Workshop",
-    "English Communication Skills Laboratory",
-    "Applied Chemistry Lab",
-    "Programming for Problem Solving using C Lab",
-    "Mathematics – II",
-    "Applied Physics",
-    "Digital Logic Design",
-    "Python Programming",
-    "Data Structures",
-    "Applied Physics Lab",
-    "Python Programming Lab",
-    "Data Structures Lab",
-    "Mathematics III",
-    "Mathematical Foundations of Computer Science",
-    "Fundamentals of Data Science",
-    "Object Oriented Programming with Java",
-    "Database Management Systems",
-    "Fundamentals of Data Science Lab",
-    "Object Oriented Programming with Java Lab",
-    "Database Management Systems Lab",
-    "Mobile App Development",
-    "Essence of Indian Traditional Knowledge",
-    "Probability and Statistics",
-    "Computer Organization",
-    "Data Warehousing and Mining",
-    "Formal Languages and Automata Theory",
-    "Managerial Economics and Financial Accountancy",
-    "R Programming Lab",
-    "Data Mining using Python Lab",
-    "Web Application Development Lab",
-    "MongoDB",
-    "Computer Networks",
-    "Big Data Analytics",
-    "Design and Analysis of Algorithms",
-    "Professional Elective-II",
-    "Open Elective-II",
-    "Computer Networks Lab",
-    "Big Data Analytics Lab",
-    "Deep Learning with TensorFlow",
-    "Skill Oriented Course - IV",
-    "Professional Elective-III",
-    "Professional Elective-IV",
-    "Professional Elective-V",
-    "Open Elective-III",
-    "Universal Human Values 2: Understanding Harmony",
-    "Major Project Work, Seminar Internship"
-  ];
+  "Communicative English",
+  "Mathematics – I",
+  "Applied Chemistry",
+  "Programming for Problem Solving using C",
+  "Computer Engineering Workshop",
+  "English Communication Skills Laboratory",
+  "Applied Chemistry Lab",
+  "Programming for Problem Solving using C Lab",
+  "Mathematics – II",
+  "Applied Physics",
+  "Digital Logic Design",
+  "Python Programming",
+  "Data Structures",
+  "Applied Physics Lab",
+  "Python Programming Lab",
+  "Data Structures Lab",
+  "Mathematics III",
+  "Mathematical Foundations of Computer Science",
+  "Fundamentals of Data Science",
+  "Object Oriented Programming with Java",
+  "Database Management Systems",
+  "Fundamentals of Data Science Lab",
+  "Object Oriented Programming with Java Lab",
+  "Database Management Systems Lab",
+  "Mobile App Development",
+  "Essence of Indian Traditional Knowledge",
+  "Probability and Statistics",
+  "Computer Organization",
+  "Data Warehousing and Mining",
+  "Formal Languages and Automata Theory",
+  "Managerial Economics and Financial Accountancy",
+  "R Programming Lab",
+  "Data Mining using Python Lab",
+  "Web Application Development Lab",
+  "MongoDB",
+  "Computer Networks",
+  "Big Data Analytics",
+  "Design and Analysis of Algorithms",
+  "Professional Elective-II",
+  "Open Elective-II",
+  "Computer Networks Lab",
+  "Big Data Analytics Lab",
+  "Deep Learning with TensorFlow",
+  "Skill Oriented Course - IV",
+  "Professional Elective-III",
+  "Professional Elective-IV",
+  "Professional Elective-V",
+  "Open Elective-III",
+  "Universal Human Values 2: Understanding Harmony",
+  "Major Project Work, Seminar Internship"
+];
 
+ 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   List<String> selectedSubjects = [];
@@ -106,30 +106,24 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+               
               const SizedBox(height: 16),
-              DropDownMultiSelect(
-                selected_values_style: TextStyle(color: Colors.black),
-                options: subjects,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.book),
-                  labelText: "Select Subject",
-                ),
-                validator: (selectedOptions) {
-                  if (selectedOptions == null) {
-                    return "Invaild";
-                  }
-                  return "ok";
-                },
-                selectedValues: selectedSubjects,
-                onChanged: (p0) {
-                  setState(() {
-                    selectedSubjects = p0;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              ...subjects.map((subject) {
+                return CheckboxListTile(
+                  title: Text(subject),
+                  value: selectedSubjects.contains(subject),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value!) {
+                        selectedSubjects.add(subject);
+                      } else {
+                        selectedSubjects.remove(subject);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
@@ -147,9 +141,9 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
-                  final result = await createWithEmailAndPassword(
+                  final result = await  createWithEmailAndPassword(
                       _emailController.text, _passwordController.text);
-
+        
                   if (result) {
                     showSnack("Sucess");
                     showFacultySubjectInDataBase();
@@ -182,7 +176,7 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (ctx) => FacultyBranchesPage(
-                            imageUrl: firebaseAuth.currentUser!.photoURL!,
+                             imageUrl: firebaseAuth.currentUser!.photoURL!,
                             email: firebaseAuth.currentUser!.email!,
                             name: firebaseAuth.currentUser!.displayName!,
                           ),

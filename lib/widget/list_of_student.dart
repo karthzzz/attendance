@@ -1,5 +1,6 @@
 import 'package:attendance1/firebase/firebaseQueries.dart';
 import 'package:attendance1/widget/addClass.dart';
+import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:attendance1/widget/student_list.dart';
 import 'package:flutter/material.dart';
 
@@ -79,7 +80,7 @@ class _ListOfStudentState extends State<ListOfStudent> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               gradient: LinearGradient(
                   colors: [Colors.white10, Colors.lightBlue, Colors.green])),
           child: Column(

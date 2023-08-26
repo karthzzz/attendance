@@ -40,7 +40,9 @@ class _LoginPageState extends State<LoginPage> {
         elevation: 0,
         backgroundColor: Color(0xFF1E2C3A),
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        color: Color(0xFF15202B),
+        padding: EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
