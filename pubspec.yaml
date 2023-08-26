@@ -44,6 +44,20 @@ dependencies:
   path_provider: ^2.1.0
   file_picker: ^5.3.3
   multiselect: ^0.1.0
+  
+
+dependency_overrides:
+  sms_advanced:
+    git:
+      url: https://github.com/<package_author>/<package_repo>.git  # URL to the package
+    version: ^1.1.0  # Use a compatible version
+
+flutter:
+  plugin:9999.0.0  # Use the latest Flutter plugin version
+ 
+
+
+
    
 
 dev_dependencies:
