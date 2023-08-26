@@ -1,16 +1,36 @@
-
 import 'package:attendance1/widget/admin/admin.dart';
 import 'package:attendance1/widget/faculty/faculty_login.dart';
 import 'package:attendance1/widget/faculty/faculty_register.dart';
 import 'package:attendance1/widget/student/student_home.dart';
 import 'package:attendance1/widget/student/student_login_register.dart';
 import 'package:flutter/material.dart';
- 
+
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Route _createRoute(dynamic str) {
+      return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => str,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.decelerate;
+
+            final tween = Tween(begin: begin, end: end);
+            final curvedAnimation = CurvedAnimation(
+              parent: animation,
+              curve: curve,
+            );
+
+            return SlideTransition(
+              position: tween.animate(curvedAnimation),
+              child: child,
+            );
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('NRIIT Attendance'),
@@ -38,12 +58,7 @@ class Home extends StatelessWidget {
               icon: Icons.admin_panel_settings,
               color: const Color(0xFFE57373), // Light red button color
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
-                );
+                Navigator.push(context, _createRoute(LoginPage()));
               },
             ),
             const SizedBox(height: 10),
@@ -53,11 +68,7 @@ class Home extends StatelessWidget {
               color: const Color(0xFF81C784), // Light green button color
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FacultyRegistrationScreen(),
-                  ),
-                );
+                    context, _createRoute(FacultyRegistrationScreen()));
               },
             ),
             const SizedBox(height: 10),
@@ -66,12 +77,7 @@ class Home extends StatelessWidget {
               icon: Icons.person,
               color: const Color(0xFF9575CD), // Light purple button color
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StudentLoginRegister(),
-                  ),
-                );
+                  Navigator.push(context, _createRoute(StudentLoginRegister()));
               },
             ),
           ],

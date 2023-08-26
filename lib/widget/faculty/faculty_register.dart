@@ -3,6 +3,7 @@ import 'package:attendance1/widget/admin/admin_branch_page.dart';
 import 'package:attendance1/widget/faculty/faculty_branch_list.dart';
 import 'package:attendance1/widget/faculty/faculty_login.dart';
 import 'package:flutter/material.dart';
+import 'package:multiselect/multiselect.dart';
 
 class FacultyRegistrationScreen extends StatefulWidget {
   @override
@@ -108,21 +109,31 @@ class _FacultyRegistrationScreenState extends State<FacultyRegistrationScreen> {
             children: [
                
               const SizedBox(height: 16),
-              ...subjects.map((subject) {
-                return CheckboxListTile(
-                  title: Text(subject),
-                  value: selectedSubjects.contains(subject),
-                  onChanged: (value) {
+               Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropDownMultiSelect(
+                  options: subjects,
+                  hint: Text("Select Subjects"),
+                  decoration: InputDecoration(
+                     
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                       ),
+                  validator: (selectedOptions) {
+                    if (selectedOptions == null) {
+                      return "Invaild";
+                    }
+                    return "ok";
+                  },
+                  selectedValues: selectedSubjects,
+                  onChanged: (p0) {
                     setState(() {
-                      if (value!) {
-                        selectedSubjects.add(subject);
-                      } else {
-                        selectedSubjects.remove(subject);
-                      }
+                      selectedSubjects = p0;
                     });
                   },
-                );
-              }).toList(),
+                ),
+              ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,

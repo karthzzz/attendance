@@ -29,7 +29,7 @@ class StudentLoginRegister extends StatelessWidget{
           children: [
             Container(
               decoration: ShapeDecoration(shape: CircleBorder()),
-              child: Image.network("https://banner2.cleanpng.com/20180702/kpo/kisspng-google-logo-google-search-google-doodle-avex-group-5b39aef2bfc3e4.7157968215305069947855.jpg"),
+              child: Image.network("https://banner2.cleanpng.com/20180702/kpo/kisspng-google-logo-google-search-google-doodle-avex-group-5b39aef2bfc3e4.7157968215305069947855.jpg" , color: Colors.white,),
             ),
             SizedBox(height: 20),
             ElevatedButton(

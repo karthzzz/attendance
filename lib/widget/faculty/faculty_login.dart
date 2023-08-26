@@ -12,6 +12,34 @@ class _FacultyLoginScreenState extends State<FacultyLoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Route _createRoute(dynamic str) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => str,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.decelerate;
+
+          final tween = Tween(begin: begin, end: end);
+          final curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: curve,
+          );
+
+          return SlideTransition(
+            position: tween.animate(curvedAnimation),
+            child: child,
+          );
+        });
+  }
+
   void showSnack(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -51,17 +79,17 @@ class _FacultyLoginScreenState extends State<FacultyLoginScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async {
-                  final result = await  createWithEmailAndPassword(
+                  final result = await createWithEmailAndPassword(
                       _emailController.text, _passwordController.text);
 
                   if (result) {
                     showSnack("Sucess");
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (ctx) => FacultyBranchesPage(
-                          imageUrl: firebaseAuth.currentUser!.photoURL!,
-                              email: firebaseAuth.currentUser!.email!,
-                              name: firebaseAuth.currentUser!.displayName!,
-                            )));
+                    Navigator.of(context)
+                        .pushReplacement(_createRoute(FacultyBranchesPage(
+                      imageUrl: firebaseAuth.currentUser!.photoURL!,
+                      email: firebaseAuth.currentUser!.email!,
+                      name: firebaseAuth.currentUser!.displayName!,
+                    )));
                   } else {
                     showSnack("Failed");
                   }
@@ -77,13 +105,11 @@ class _FacultyLoginScreenState extends State<FacultyLoginScreen> {
                     if (usercredenital.user != null) {
                       showSnack("Sucessfull login");
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (ctx) => FacultyBranchesPage(
-                             imageUrl: firebaseAuth.currentUser!.photoURL!,
-                            email: firebaseAuth.currentUser!.email!,
-                            name: firebaseAuth.currentUser!.displayName!,
-                          ),
-                        ),
+                       _createRoute(FacultyBranchesPage(
+                      imageUrl: firebaseAuth.currentUser!.photoURL!,
+                      email: firebaseAuth.currentUser!.email!,
+                      name: firebaseAuth.currentUser!.displayName!,
+                    ))
                       );
                     } else {
                       showSnack("Login filed");

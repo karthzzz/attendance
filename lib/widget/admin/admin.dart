@@ -20,10 +20,32 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  Route _createRoute(dynamic str) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => str,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1, 0.0);
+          const end = Offset.zero;
+          const curve = Curves.decelerate;
+
+          final tween = Tween(begin: begin, end: end);
+          final curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: curve,
+          );
+
+          return SlideTransition(
+            position: tween.animate(curvedAnimation),
+            child: child,
+          );
+        });
+  }
+
   void showSnack(String message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        elevation: 3,
         title: Text(
           message,
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -46,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'ADMIN',
               style: TextStyle(
                 fontSize: 28,
@@ -54,11 +76,11 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.green,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Email',
                 hintStyle: TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
@@ -69,11 +91,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: _passwordController,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
                 hintText: 'Password',
                 hintStyle: TextStyle(color: Colors.grey),
                 border: OutlineInputBorder(
@@ -85,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 final result = await signWithEmailAndPassword(
@@ -95,22 +117,22 @@ class _LoginPageState extends State<LoginPage> {
                 if (result) {
                   showSnack("Success");
                   Navigator.of(context).pop();
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (ctx)  => BranchesPage()),
-                  );
+                  Navigator.of(context)
+                      .pushReplacement(_createRoute(BranchesPage()));
                 } else {
                   showSnack("Failed");
                 }
               },
               style: ElevatedButton.styleFrom(
                 primary: Colors.green,
-                textStyle: TextStyle(fontSize: 16, color: Colors.white),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                textStyle: const TextStyle(fontSize: 16, color: Colors.white),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('Login'),
+              child: const Text('Login'),
             ),
             const SizedBox(
               height: 20,
@@ -120,16 +142,13 @@ class _LoginPageState extends State<LoginPage> {
                   final usercredenital = await signInWithGoogle();
                   if (usercredenital.user != null) {
                     showSnack("Sucessfull login");
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (ctx) => const BranchesPage(),
-                      ),
-                    );
+                    Navigator.of(context)
+                        .pushReplacement(_createRoute(BranchesPage()));
                   } else {
                     showSnack("Login filed");
                   }
                 },
-                child: Text("Google"))
+                child: const Text("Google"))
           ],
         ),
       ),
