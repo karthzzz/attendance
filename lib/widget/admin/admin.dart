@@ -60,10 +60,10 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: Text('Admin Login'),
         elevation: 0,
-        backgroundColor: Color(0xFF1E2C3A),
+        
       ),
       body: Container(
-        color: Color(0xFF15202B),
+         
         padding: EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

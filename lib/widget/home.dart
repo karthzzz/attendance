@@ -16,7 +16,7 @@ class Home extends StatelessWidget {
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1, 0.0);
             const end = Offset.zero;
-            const curve = Curves.decelerate;
+            const curve = Curves.linearToEaseOut;
 
             final tween = Tween(begin: begin, end: end);
             final curvedAnimation = CurvedAnimation(
@@ -34,53 +34,65 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('NRIIT Attendance'),
-        elevation: 0, // Remove shadow from app bar
-        backgroundColor: Color(0xFF1E2C3A), // Dark blue app bar color
+        elevation: 0,
+         // Remove shadow from app bar
+        // Dark blue app bar color
       ),
       body: Container(
-        color: const Color(0xFF15202B), // Darker background color
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
-            const Text(
-              'Hello, Attendees!',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            ButtonWithImage(
-              label: 'Admin',
-              icon: Icons.admin_panel_settings,
-              color: const Color(0xFFE57373), // Light red button color
-              onPressed: () {
-                Navigator.push(context, _createRoute(LoginPage()));
-              },
-            ),
-            const SizedBox(height: 10),
-            ButtonWithImage(
-              label: 'Faculty',
-              icon: Icons.school,
-              color: const Color(0xFF81C784), // Light green button color
-              onPressed: () {
-                Navigator.push(
-                    context, _createRoute(FacultyRegistrationScreen()));
-              },
-            ),
-            const SizedBox(height: 10),
-            ButtonWithImage(
-              label: 'Student',
-              icon: Icons.person,
-              color: const Color(0xFF9575CD), // Light purple button color
-              onPressed: () {
-                  Navigator.push(context, _createRoute(StudentLoginRegister()));
-              },
-            ),
+        height: double.infinity,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Theme.of(context).colorScheme.primary,
+            Theme.of(context).colorScheme.secondary.withOpacity(0.3),
           ],
+        )),
+        padding: const EdgeInsets.all(20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 40),
+              const Text(
+                'Hello, Attendees!',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ButtonWithImage(
+                label: 'Admin',
+                icon: Icons.admin_panel_settings,
+                color: const Color(0xFFE57373), // Light red button color
+                onPressed: () {
+                  Navigator.push(context, _createRoute(LoginPage()));
+                },
+              ),
+              const SizedBox(height: 10),
+              ButtonWithImage(
+                label: 'Faculty',
+                icon: Icons.school,
+                color: const Color(0xFF81C784), // Light green button color
+                onPressed: () {
+                  Navigator.push(
+                      context, _createRoute(FacultyRegistrationScreen()));
+                },
+              ),
+              const SizedBox(height: 10),
+              ButtonWithImage(
+                label: 'Student',
+                icon: Icons.person,
+                color: const Color(0xFF9575CD), // Light purple button color
+                onPressed: () {
+                  Navigator.push(context, _createRoute(StudentLoginRegister()));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

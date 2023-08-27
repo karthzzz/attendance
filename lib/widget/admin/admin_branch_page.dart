@@ -73,7 +73,6 @@ class _BranchesPageState extends State<BranchesPage> {
           ),
         ],
         elevation: 0,
-        backgroundColor: Color(0xFF1E2C3A),
       ),
       body: RefreshIndicator(
         onRefresh: () async{
@@ -89,7 +88,7 @@ class _BranchesPageState extends State<BranchesPage> {
         strokeWidth: 10,
         color: Colors.lightBlue,
         child: Container(
-          color: Color(0xFF15202B),
+          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -171,10 +170,9 @@ class _BranchButtonState extends State<BranchButton> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
+          textAlign: TextAlign.center,
         ),
-        backgroundColor: Color(0xFF1E2C3A),
         content: Container(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -190,8 +188,7 @@ class _BranchButtonState extends State<BranchButton> {
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFFE57373),
-                  textStyle: TextStyle(fontSize: 16, color: Colors.white),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 16, color: Colors.white),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -212,8 +209,7 @@ class _BranchButtonState extends State<BranchButton> {
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFFE57373),
-                  textStyle: TextStyle(fontSize: 16, color: Colors.white),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  textStyle:const  TextStyle(fontSize: 16, color: Colors.white),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

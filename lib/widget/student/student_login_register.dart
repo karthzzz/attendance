@@ -22,14 +22,14 @@ class StudentLoginRegister extends StatelessWidget{
       appBar: AppBar(
         title: Text('Student Login'),
       ),
-      backgroundColor: Colors.lightBlue,
+ 
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               decoration: ShapeDecoration(shape: CircleBorder()),
-              child: Image.network("https://banner2.cleanpng.com/20180702/kpo/kisspng-google-logo-google-search-google-doodle-avex-group-5b39aef2bfc3e4.7157968215305069947855.jpg" , color: Colors.white,),
+              child: Image.network("https://sanantoniotreesurgeons.com/wp-content/uploads/2021/05/Illustration-of-Google-icon-on-transparent-background-PNG.png",),
             ),
             SizedBox(height: 20),
             ElevatedButton(

@@ -385,7 +385,7 @@ class _FacultyBranchButtonState extends State<FacultyBranchButton> {
           showAlearDailgo(widget.name);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
+           
           textStyle: const TextStyle(fontSize: 20, color: Colors.white),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         ),
